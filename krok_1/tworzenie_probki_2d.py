@@ -7,7 +7,7 @@
 from yade import ymport
 from yade.pack import *
 from yade import pack
-from yade import qt 
+from yade import qt
 from yade import plot
 from yade import utils
 import export
@@ -18,7 +18,7 @@ import math
 young = 30e10
 local_poisson = 0.2
 frictionAngle = 0
-radius_expansion = False  
+radius_expansion = False
 density_sand = 2600
 ################
 
@@ -38,12 +38,12 @@ plik_tymczasowy = 'plik1'
 
 O.trackEnergy=True
 plot_interval		= 1
-damping			= 0.95 
+damping			= 0.95
 time_step	 	= 1e-6
-USE_MOMENTS = False 
-USE_INCR_FORM = False  
-bending_ratio = 0.5 
-moment_limit = 0.2 
+USE_MOMENTS = False
+USE_INCR_FORM = False
+bending_ratio = 0.5
+moment_limit = 0.2
 
 #####################################################################################
 ###################  PARAMETY  DO  ZMIENIANIA #######################################
@@ -60,7 +60,7 @@ c_std = 0.6
 #
 r_3  = 0.0015		# kruszywa
 r_6  = 0.0030
-r_12 = 0.0060		
+r_12 = 0.0060
 
 
 
@@ -119,13 +119,13 @@ def set_geometry():
 
 
 	strzal()
-	walls=yade.utils.aabbWalls(	
+	walls=yade.utils.aabbWalls(
 					#extrema=((0,0,0),size), # auto
 					thickness=.01,
 					oversizeFactor=2.0,
 					material='sciana')
 	wallIds_local=O.bodies.append(walls)
-	
+
 	return wallIds_local
 
 
@@ -134,7 +134,7 @@ def set_geometry():
 ##################### pierwszy strzal
 def strzal():
 	global dlugosc, wysokosc,glebokosc
-	
+
 	il = 1.11
 	num = int((zageszczenie_1/(3.1415*r_3*r_3)*0.1*wysokosc*szerokosc)*il)
 	print '3: '+str(num)
@@ -145,7 +145,7 @@ def strzal():
 				rRelFuzz=std_dev,
 				num=num,
 				periodic=False,
-				porosity=1 
+				porosity=1
 				)
 	O.bodies.append([utils.sphere(	center,
 				rad,
@@ -161,7 +161,7 @@ def strzal():
 				rRelFuzz=std_dev,
 				num=num,
 				periodic=False,
-				porosity=1 
+				porosity=1
 				)
 	O.bodies.append([utils.sphere(	center,
 				rad,
@@ -177,7 +177,7 @@ def strzal():
 				rRelFuzz=std_dev,
 				num=num,
 				periodic=False,
-				porosity=1 
+				porosity=1
 				)
 	O.bodies.append([utils.sphere(	center,
 				rad,
@@ -191,10 +191,10 @@ def strzal():
 		a.state.pos = pos
 		if (a.material.label == 'sciana' ):
 			a.state.blockedDOFs='XYZxyz'
-			a.shape.color = Vector3( 0.0 ,  0.0 ,  255.0)/255.0  		
+			a.shape.color = Vector3( 0.0 ,  0.0 ,  255.0)/255.0
 		else:
 			a.state.blockedDOFs='XYz'
-			a.shape.color = Vector3( 0.0 ,  255.0 ,  255.0)/255.0  
+			a.shape.color = Vector3( 0.0 ,  255.0 ,  255.0)/255.0
 
 	pole = 0
 	for a in O.bodies:
@@ -219,7 +219,7 @@ def strzal_2():
 				rRelFuzz=c_std,
 				num=num,
 				periodic=False,
-				porosity=1 
+				porosity=1
 				)
 	O.bodies.append([utils.sphere(	center,
 				rad,
@@ -233,15 +233,15 @@ def strzal_2():
 		a.state.pos = pos
 		if (a.material.label == 'sciana' ):
 			a.state.blockedDOFs='XYZxyz'
-			a.shape.color = Vector3( 0.0 ,  0.0 ,  255.0)/255.0  		
+			a.shape.color = Vector3( 0.0 ,  0.0 ,  255.0)/255.0
 		else:
 			a.state.blockedDOFs='XYz'
 			if (a.material.label == 'cement' ):
-				a.shape.color = Vector3( 0.0 ,  255.0 ,  0.0)/255.0  
+				a.shape.color = Vector3( 0.0 ,  255.0 ,  0.0)/255.0
 
 
 
-	
+
 #######################  moving back spheres to the box
 
 def rnd1(): # random value between 0 ... 1
@@ -277,12 +277,12 @@ def stabilizacja():
 	czas = czas+1
 
 	cofaj_kulki_do_pudelka()
-	
+
 	if (O.iter%1000 == 1):
-		p=voxelPorosityChyba(250,Vector3(-0.5*szerokosc,-0.5*wysokosc,-0.0002),Vector3(0.5*szerokosc,0.5*wysokosc,0.0002)) 
+		p=voxelPorosityChyba(250,Vector3(-0.5*szerokosc,-0.5*wysokosc,-0.0002),Vector3(0.5*szerokosc,0.5*wysokosc,0.0002))
 		print 'zageszczenie:  ' +str(1-p)
 	if (O.iter%100==1 and O.iter > 10000):
-		p=voxelPorosityChyba(600,Vector3(-0.5*szerokosc,-0.5*wysokosc,-0.0002),Vector3(0.5*szerokosc,0.5*wysokosc,0.0002)) 
+		p=voxelPorosityChyba(600,Vector3(-0.5*szerokosc,-0.5*wysokosc,-0.0002),Vector3(0.5*szerokosc,0.5*wysokosc,0.0002))
 		if (czas > 100):
 			if ((1-p) < porowatosc_2):
 				strzal_2()
@@ -292,9 +292,9 @@ def stabilizacja():
 				E_kin_translation = E_tracker['kinTrans']
 				if (E_kin_translation < Enegria_Ostateczna):
 					print 'zageszczenie_ostateczne:  ' + str(1-p)
-					yade.export.text(plik_wyjsciowy)	
-					zapis_ost()	
-					O.pause()	
+					yade.export.text(plik_wyjsciowy)
+					zapis_ost()
+					O.pause()
 
 
 
@@ -315,24 +315,24 @@ def zapis_ost():
 			rad = a.shape.radius
 			if(a.material.label=='kruszywo'):
 				logfile3.write(str(pos_x))
-				logfile3.write('        ')			
+				logfile3.write('        ')
 				logfile3.write(str(pos_y))
-				logfile3.write('        ')			
+				logfile3.write('        ')
 				logfile3.write(str(pos_z))
-				logfile3.write('        ')	
+				logfile3.write('        ')
 				logfile3.write(str(rad))
 				logfile3.write('\n')
 			if (a.material.label == 'cement'):
 				logfile4.write(str(pos_x))
-				logfile4.write('        ')			
+				logfile4.write('        ')
 				logfile4.write(str(pos_y))
-				logfile4.write('        ')			
+				logfile4.write('        ')
 				logfile4.write(str(pos_z))
-				logfile4.write('        ')	
+				logfile4.write('        ')
 				logfile4.write(str(rad))
 				logfile4.write('\n')
-	logfile3.close()	
-	logfile4.close()	
+	logfile3.close()
+	logfile4.close()
 
 	O.pause()
 ######################################################################################
@@ -351,15 +351,15 @@ O.engines=[
 		InsertionSortCollider([Bo1_Sphere_Aabb(),Bo1_Box_Aabb(),Bo1_Facet_Aabb(),Bo1_Wall_Aabb()]),
 		InsertionSortCollider(nBins=5,verletDist=radius*0.05),
 		InteractionLoop(
-			[Ig2_Sphere_Sphere_ScGeom6D(),Ig2_Box_Sphere_ScGeom6D()],	
+			[Ig2_Sphere_Sphere_ScGeom6D(),Ig2_Box_Sphere_ScGeom6D()],
 			[Ip2_CohFrictMat_CohFrictMat_CohFrictPhys()],
 			[law_local]
 		),
-		GlobalStiffnessTimeStepper(active=1,timeStepUpdateInterval=50),		
+		GlobalStiffnessTimeStepper(active=1,timeStepUpdateInterval=50),
 		GravityEngine(gravity=(0,0,0)),
 		newtonIntegrator,
 		PyRunner(iterPeriod=1,command='stabilizacja()'),
-	]	
+	]
 ####
 ### plot
 from yade import plot
